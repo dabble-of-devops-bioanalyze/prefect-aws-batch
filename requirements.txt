@@ -1,0 +1,9 @@
+prefect>=2.0
+prefect-shell
+prefect-aws
+boto3-stubs[s3,ec2,batch,logs,essential]
+typer
+typer-cli
+rich
+rich-click
+s3fs

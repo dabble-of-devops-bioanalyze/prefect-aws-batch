@@ -1,0 +1,20 @@
+name: prefect_aws_batch
+channels:
+    - conda-forge
+    - bioconda
+    - defaults
+dependencies:
+    - prefect>=2
+    - typer
+    - typer
+    - typer-cli
+    - rich
+    - rich-click
+    - pip
+    -   pip:
+            - s3fs
+            - colorlog
+            - prefect>=2
+            - prefect-shell
+            - prefect-aws
+            - boto3-stubs[s3,ec2,batch,logs,essential]
