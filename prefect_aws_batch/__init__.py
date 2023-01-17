@@ -364,9 +364,6 @@ def submit_batch_jobs(
             )
 
     """
-    if watch and not log_client:
-        raise Exception(f"If watch=True you must specify the log_client")
-
     submit_job_responses = submit_batch_job_task.map(
         batch_client=unmapped(batch_client), job_data=batch_jobs
     )
