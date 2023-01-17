@@ -335,35 +335,40 @@ def submit_batch_jobs(
     log_client: Optional[Any],
     watch=True,
 ) -> List[SubmitJobResponseTypeDef]:
+    """
+    Example:
+
+        submit_job_responses = submit_job_responses.result()
+
+        for job_data, submit_job_response in zip(batch_jobs, submit_job_responses):
+            job_queue = job_data['jobQueue']
+            list_job_response = batch_client.list_jobs(
+                jobQueue=job_queue,
+                filters=[
+                    {
+                        'name': 'JOB_NAME',
+                        'values': [
+                            job_data['jobName'],
+                        ]
+                    },
+                ]
+            )
+            list_job_responses.append(list_job_response)
+
+        watch_jobs_data = list(map(lambda x: x[1], submit_job_responses))
+        if watch:
+            statuses = watch_batch_job_task.map(
+                batch_client=unmapped(batch_client),
+                log_client=unmapped(log_client),
+                job_response=watch_jobs_data
+            )
+
+    """
     if watch and not log_client:
         raise Exception(f"If watch=True you must specify the log_client")
 
     submit_job_responses = submit_batch_job_task.map(
         batch_client=unmapped(batch_client), job_data=batch_jobs
     )
-    # submit_job_responses = submit_job_responses.result()
-
-    # for job_data, submit_job_response in zip(batch_jobs, submit_job_responses):
-    #     job_queue = job_data['jobQueue']
-    #     list_job_response = batch_client.list_jobs(
-    #         jobQueue=job_queue,
-    #         filters=[
-    #             {
-    #                 'name': 'JOB_NAME',
-    #                 'values': [
-    #                     job_data['jobName'],
-    #                 ]
-    #             },
-    #         ]
-    #     )
-    #     list_job_responses.append(list_job_response)
-
-    # watch_jobs_data = list(map(lambda x: x[1], submit_job_responses))
-    # if watch:
-    #     statuses = watch_batch_job_task.map(
-    #         batch_client=unmapped(batch_client),
-    #         log_client=unmapped(log_client),
-    #         job_response=watch_jobs_data
-    #     )
 
     return list_job_responses
